@@ -8,7 +8,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Fabian se la come
+          React
         </a>
       </header>
     </div>
