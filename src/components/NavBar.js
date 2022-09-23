@@ -21,7 +21,7 @@ const NavBar = () => {
                 <Button style={{color: "#cc9e41"}} variant="text">Otros</Button>
             </div>
 
-            <div>|
+            <div>
                 <CartWidget/>
             </div>
 
