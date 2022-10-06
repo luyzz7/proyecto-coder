@@ -1,6 +1,8 @@
 import React from "react";
 import CartWidget from "./CartWidget";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { categoriesList } from "../constants/Constants";
 
 const NavBar = () => {
     return (
@@ -12,13 +14,19 @@ const NavBar = () => {
             alignItems: "center"
         }}>
             <div>
-                <img src="logo.png" alt="Logo"/>
+                <Link to="/">
+                    <img src="logo.png" alt="Logo"/>
+                </Link>
             </div>
 
             <div>
-                <Button style={{color: "#cc9e41"}} variant="text">Suplementos</Button>
-                <Button style={{color: "#cc9e41"}} variant="text">Accesorios</Button>
-                <Button style={{color: "#cc9e41"}} variant="text">Otros</Button>
+                {
+                    categoriesList.map((category) => <Link key={category.id} to={"/category/" + category.id}>
+                        <Button style={{color: "#cc9e41"}} variant="text">
+                            {category.title}
+                        </Button>
+                    </Link>)
+                }
             </div>
 
             <div>

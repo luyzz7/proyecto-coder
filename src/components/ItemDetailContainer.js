@@ -1,15 +1,15 @@
 import React from "react";
-import ItemList from "./ItemList";
+import ItemDetail from "./ItemDetail";
 
-const ItemListContainer = () => {
+const ItemDetailContainer = () => {
     return (
         <div style={{
             padding:"60px",
             background: "#eeeeee"
         }}>
-            <ItemList/>
+            <ItemDetail/>
         </div>
     );
 }
 
-export default ItemListContainer;
+export default ItemDetailContainer;
