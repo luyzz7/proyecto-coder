@@ -1,8 +1,8 @@
 import { Grid, LinearProgress, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getProducts } from "../api/mockApi";
+import { Link, useParams } from "react-router-dom";
 import { categoriesList } from "../constants/Constants";
+import { getProducts } from "../Services/firebase";
 import Item from "./Item";
 
 const ItemList = () => {
@@ -52,7 +52,13 @@ const ItemList = () => {
                 </Grid>
             }
             {
-                !loading && products.length === 0 && <Typography>No se encontraron productos en esta categoría</Typography>
+                !loading && products.length === 0 &&
+                <div>
+                    <Typography align="center">No se encontraron productos en esta categoría</Typography>
+                    <Typography align="center">
+                        <Link to="/">Ir al Inicio.</Link>
+                    </Typography>
+                </div>
             }
         </div>
     )

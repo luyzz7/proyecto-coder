@@ -45,8 +45,6 @@ const ItemCount = (props) => {
                 style={{
                     marginLeft: "15px",
                     backgroundColor: "#cc9e41",
-
-
                 }}
                 variant="contained" onClick={() => props.onAdd(count)} disabled={props.stock === 0}
             >

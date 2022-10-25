@@ -1,21 +1,38 @@
-import { Grid, LinearProgress, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getProduct } from "../api/mockApi";
+import { Button, Grid, LinearProgress, Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { cartContext } from "../context/cartContext";
+import { getProduct } from "../Services/firebase";
 import ItemCount from "./ItemCount";
 
 const ItemDetail = () => {
+    const { addItem, removeItem,getProductQuantity } = useContext(cartContext);
     const { id } = useParams();
+    const [errorMsg, setErrorMsg] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState(null);
+    const [count, setCount] = useState(0);
 
-    const onAdd = (count) => console.log("Agregados " + count + " stock al carrito");
+    const onAdd = (quantity) => {
+        setCount(quantity);
+        addItem(product, quantity);
+    };
+
+    const handleRemove = () => {
+        setCount(0);
+        removeItem(product.id);
+    }
 
     useEffect(() => {
         setLoading(true);
-        getProduct(id).then(
-            (newProduct) => setProduct(newProduct)
-        ).finally(() => {
+        getProduct(id)
+        .then((newProduct) => {
+            setErrorMsg(null);
+            setProduct(newProduct)
+        }).catch((error) => {
+            setErrorMsg(error.message);
+            setProduct(null);
+        }).finally(() => {
             setLoading(false);
         });
     }, [id]);
@@ -27,7 +44,16 @@ const ItemDetail = () => {
                 loading && <LinearProgress />
             }
             {
-                !loading && <div>
+                !loading && errorMsg &&
+                <div>
+                    <Typography align="center">{errorMsg}</Typography>
+                    <Typography align="center">
+                        <Link to="/">Ir al Inicio.</Link>
+                    </Typography>
+                </div>
+            }
+            {
+                !loading && product && <div>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <div style={{
@@ -91,10 +117,34 @@ const ItemDetail = () => {
                                 >
                                     {product.description}
                                 </Typography>
-                                <ItemCount
-                                    stock={product.stock}
-                                    onAdd={onAdd}
-                                />
+                                {
+                                    count === 0 
+                                    ?
+                                    <ItemCount
+                                        stock={product.stock - getProductQuantity(product.id)}
+                                        onAdd={onAdd}
+                                    />
+                                    :
+                                    <div>
+                                        <Link to="/cart"
+                                            style={{
+                                                textDecoration: "none",
+                                                marginRight: "15px",
+                                            }}
+                                        >
+                                            <Button
+                                                style={{
+                                                    backgroundColor: "#cc9e41",
+                                                }}
+                                                variant="contained"
+                                            >Terminar mi compra</Button>
+                                        </Link>
+                                        <Button
+                                            onClick={handleRemove}
+                                            variant="outlined"
+                                        >Remover del carrito</Button>
+                                    </div>
+                                }
                             </div>
                         </Grid>
                     </Grid>
